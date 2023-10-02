@@ -1,3 +1,6 @@
 # Northcoders News API
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+For instructions to create the environment variables:
+`create 2 files: .env.test and .env.development`
+`In each file add PGDATABASE=`
+`Go to the setup.sql file and copy the correct database name and paste it into the .env. files to PGDATABASE=`
