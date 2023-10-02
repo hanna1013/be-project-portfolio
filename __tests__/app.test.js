@@ -13,13 +13,20 @@ describe("/api/topics", () => {
         .get('/api/topics')
         .expect(200)
         .then((response) => {
-            console.log(response.body)
             expect(response.body.topics.length).toBe(3);
            response.body.topics.forEach((topics) => {
                 expect(typeof topics.slug).toBe('string');
                 expect(typeof topics.description).toBe('string');
             });
         }) 
+    })
+    test("GET:404 sends 404 and error message when given bad path", () => {
+        return request(app)
+        .get('/api/toopics')
+        .expect(404)
+        .then((response) => {
+            expect(response.body.msg).toBe('path not found')
+        })
     })
     
 })
