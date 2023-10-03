@@ -39,7 +39,6 @@ describe("/api", () => {
         .get('/api')
         .expect(200)
         .then((response) => {
-            //console.log(response.body)
             expect(response.body.endpoints).toEqual(endpoints);
         })
     })
@@ -52,7 +51,6 @@ describe("/api/articles/:article_id", () => {
         .get('/api/articles/1')
         .expect(200)
         .then((response) => {
-            console.log(response.body)
             expect(response.body.article.article_id).toBe(1)
             expect(response.body.article.title).toBe("Living in the shadow of a great man");
             expect(response.body.article.topic).toBe("mitch");
