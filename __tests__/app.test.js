@@ -78,3 +78,48 @@ describe("/api/articles/:article_id", () => {
         })
         })
 })
+
+describe("/api/articles/:article_id/comments", () => {
+    test("GET: 200 respond with an array of comments for a single article", () => {
+        return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then((response) => {
+            expect(response.body.comments.length).toBe(11);
+            response.body.comments.forEach((comment) => {
+                console.log(response.body)
+                expect(typeof comment.body).toBe('string');
+                expect(typeof comment.votes).toBe('number');
+                expect(typeof comment.author).toBe('string');
+                expect(comment.article_id).toBe(1);
+                expect(typeof comment.created_at).toBe('string')
+            })
+        })
+    })
+    test("GET: 200 responds with most recent comments first", () => {
+        return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then((response) => {
+            expect(response.body.comments).toBeSortedBy('created_at', {
+                descending: true
+            })
+        })
+    })
+    test("GET: 404 sends 404 and respond with error message when given valid id but non-existent id", () => {
+        return request(app)
+        .get("/api/articles/1111/comments")
+        .expect(404)
+        .then((response) => {
+            expect(response.body.msg).toBe('article does not exist')
+        })
+    })
+    test("GET: 400 send 400 and respond with error message when given invalid id", () => {
+        return request(app)
+        .get("/api/articles/not-an-id/comments")
+        .expect(400)
+        .then((response) => {
+            expect(response.body.msg).toBe('Invalid input')
+        })
+    })
+})

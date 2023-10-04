@@ -2,7 +2,7 @@ const express = require("express");
 const app = express()
 const {getTopics} = require("./controllers/topicsControllers.js")
 const endpoints = require("./endpoints.json")
-const {getArticleById} = require("./controllers/articlesController.js")
+const {getArticleById, getCommentsByArticleId} = require("./controllers/articlesController.js")
 
 
 
@@ -13,6 +13,8 @@ app.get("/api", (req, res) => {
 })
 
 app.get("/api/articles/:article_id", getArticleById)
+
+app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
 
 // error handling middleware
 app.all("/*", (req, res, next) => {
