@@ -87,7 +87,6 @@ describe("/api/articles/:article_id/comments", () => {
         .then((response) => {
             expect(response.body.comments.length).toBe(11);
             response.body.comments.forEach((comment) => {
-                console.log(response.body)
                 expect(typeof comment.body).toBe('string');
                 expect(typeof comment.votes).toBe('number');
                 expect(typeof comment.author).toBe('string');
@@ -120,6 +119,14 @@ describe("/api/articles/:article_id/comments", () => {
         .expect(400)
         .then((response) => {
             expect(response.body.msg).toBe('Invalid input')
+        })
+    })
+    test("GET: 200 sends 200 and responds with an empty array when an article has no comments", () => {
+        return request(app)
+        .get("/api/articles/2/comments")
+        .expect(200)
+        .then((response) => {
+            expect(response.body.comments.length).toBe(0)
         })
     })
 })
