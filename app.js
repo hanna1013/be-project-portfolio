@@ -1,12 +1,11 @@
 const express = require("express");
-const app = express()
-const {getTopics} = require("./controllers/topicsControllers.js")
-const endpoints = require("./endpoints.json")
-const {getArticleById, getArticles, getCommentsByArticleId} = require("./controllers/articlesController.js")
+const app = express();
+const {getTopics} = require("./controllers/topicsControllers.js");
+const endpoints = require("./endpoints.json");
+const {getArticleById, getArticles, getCommentsByArticleId, postComment} = require("./controllers/articlesController.js");
 
 
-
-
+app.use(express.json());
 
 app.get("/api/topics", getTopics)
 
@@ -20,6 +19,8 @@ app.get("/api/articles", getArticles)
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
 
+app.post("/api/articles/:article_id/comments", postComment)
+
 
 // error handling middleware
 app.all("/*", (req, res, next) => {
@@ -27,7 +28,7 @@ app.all("/*", (req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
-    if(err.code === '22P02')
+    if(err.code === '22P02' || err.code === '23502')
     res.status(400).send({ msg: "Invalid input"})
     next(err)
 })

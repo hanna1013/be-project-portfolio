@@ -179,4 +179,44 @@ describe("/api/articles/:article_id/comments", () => {
             expect(response.body.comments.length).toBe(0)
         })
     })
+    test("POST: 201 inserts a new comment for an article and responds with the new comment", () => {
+        const newComment = {
+            username: "butter_bridge",
+            body: "A new comment"
+        };
+        return request(app)
+        .post("/api/articles/1/comments")
+        .send(newComment)
+        .expect(201)
+        .then((response) => {
+            console.log(response.body, "< response")
+            expect(response.body.comment.article_id).toBe(1)
+            expect(response.body.comment.author).toBe("butter_bridge");
+            expect(response.body.comment.body).toBe("A new comment")
+        });
+    })
+    test("POST: 400 status and sends an error message when given incorrect comment e.g. no username", () => {
+        return request(app)
+        .post('/api/articles/1/comments')
+        .send({
+            body: "A new comment"
+        })
+        .expect(400)
+        .then((response) => {
+            expect(response.body.msg).toBe('Invalid input')
+        })
+    })
+   /* test("POST: 404 status and sends an error message when given a valid but non existent id", () => {
+        return request(app)
+        .post('/api/articles/1111/comments')
+        .send({
+            username: "icellusedkars",
+            body: "A new comment"
+        })
+        .expect(404)
+        .then((response) => {
+            expect(response.body.msg).toBe('article does not exist')
+        })
+    })*/
 })
+
