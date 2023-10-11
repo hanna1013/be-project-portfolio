@@ -243,6 +243,6 @@ describe("/api/articles/:article_id/comments", () => {
     })
    
 })
-//article_id is invalid 
+
 
 
