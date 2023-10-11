@@ -37,7 +37,8 @@ exports.postComment = (req, res, next) => {
         res.status(201).send({ comment })
     })
     .catch((error) => {
-        console.log(error)
+        if(error.constraint === 'comments_author_fkey')
+        {res.status(404).send({msg: "username not found"})}
         next(error)
     })
 }
