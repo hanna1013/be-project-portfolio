@@ -189,7 +189,6 @@ describe("/api/articles/:article_id/comments", () => {
         .send(newComment)
         .expect(201)
         .then((response) => {
-            console.log(response.body, "< response")
             expect(response.body.comment.article_id).toBe(1)
             expect(response.body.comment.author).toBe("butter_bridge");
             expect(response.body.comment.body).toBe("A new comment")
@@ -206,9 +205,9 @@ describe("/api/articles/:article_id/comments", () => {
             expect(response.body.msg).toBe('Invalid input')
         })
     })
-   /* test("POST: 404 status and sends an error message when given a valid but non existent id", () => {
+   test("POST: 404 status and sends an error message when given a valid but non existent id", () => {
         return request(app)
-        .post('/api/articles/9999/comments')
+        .post('/api/articles/1111/comments')
         .send({
             username: "icellusedkars",
             body: "A new comment"
@@ -217,6 +216,30 @@ describe("/api/articles/:article_id/comments", () => {
         .then((response) => {
             expect(response.body.msg).toBe('article does not exist')
         })
-    })*/
+    })
+    test("POST: 404 status and sends an error message when username is not found", () => {
+        return request(app)
+        .post('/api/articles/1/comments')
+        .send({
+            username: "Hanna",
+            body: "A new comment"
+        })
+        .expect(404)
+        .then((response) => {
+            expect(response.body.msg).toBe('username not found')
+        })
+    })
+    test("POST: 400 status and sends an error message when article is invalid", () => {
+        return request(app)
+        .post('/api/articles/"id-invalid"/comments')
+        .send({
+            username: "icellusedkars",
+            body: "A new comment"
+        })
+        .expect(400)
+        .then((response) => {
+            expect(response.body.msg).toBe('Invalid input')
+        })
+    })
 })
 
