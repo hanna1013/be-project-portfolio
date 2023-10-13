@@ -38,13 +38,9 @@ exports.postComment = (req, res, next) => {
         res.status(201).send({ comment })
     })
     .catch((error) => {
-        if(error.detail.includes('users')){
-            next({status:404, msg:'username does not exist'})
-        }
-        console.log(error)
+        if(error.constraint === 'comments_author_fkey')
+        {res.status(404).send({msg: "username not found"})}
         next(error)
         
     })
-
-    //check if theres no username or body, respond with 400
 }
