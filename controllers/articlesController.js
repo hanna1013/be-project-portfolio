@@ -33,6 +33,7 @@ exports.getCommentsByArticleId = (req, res, next) => {
 exports.postComment = (req, res, next) => {
     const {article_id} = req.params;
     const newComment = req.body;
+
     insertComment(newComment.username, newComment.body, article_id).then((comment) => {
         res.status(201).send({ comment })
     })
@@ -40,5 +41,6 @@ exports.postComment = (req, res, next) => {
         if(error.constraint === 'comments_author_fkey')
         {res.status(404).send({msg: "username not found"})}
         next(error)
+        
     })
 }
