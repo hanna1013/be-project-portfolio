@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 const {getTopics} = require("./controllers/topicsControllers.js");
 const endpoints = require("./endpoints.json");
-const {getArticleById, getArticles, getCommentsByArticleId, postComment} = require("./controllers/articlesController.js");
+const {getArticleById, getArticles, getCommentsByArticleId, postComment, patchArticle, deleteCommentById} = require("./controllers/articlesController.js");
+const {getUsers} = require("./controllers/usersController.js")
 
 
 app.use(express.json());
@@ -21,7 +22,11 @@ app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
 
 app.post("/api/articles/:article_id/comments", postComment)
 
+app.patch("/api/articles/:article_id", patchArticle)
 
+app.delete("/api/comments/:comment_id", deleteCommentById)
+
+app.get("/api/users", getUsers)
 // error handling middleware
 app.all("/*", (req, res, next) => {
     res.status(404).send({msg: 'path not found'})
