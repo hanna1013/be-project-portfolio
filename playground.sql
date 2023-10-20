@@ -6,3 +6,5 @@ SELECT * FROM articles;
         FROM articles
         LEFT JOIN comments ON articles.article_id = comments.comment_id
         GROUP BY articles.article_id;
+
+        SELECT * FROM topics;

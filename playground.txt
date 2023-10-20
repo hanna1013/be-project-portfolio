@@ -33,3 +33,10 @@ You are now connected to database "nc_news_test" as user "hannas".
  butter_bridge | Moustache                                              |         12 | mitch | 2020-10-11 12:24:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             1
 (13 rows)
 
+ slug  |          description           
+-------+--------------------------------
+ mitch | The man, the Mitch, the legend
+ cats  | Not dogs
+ paper | what books are made of
+(3 rows)
+

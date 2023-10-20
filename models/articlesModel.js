@@ -16,31 +16,29 @@ exports.selectArticleById = (article_id) => {
     
 exports.selectArticle = (topic) => {
     const queryValues = []
-    let queryStr = `WHERE articles.topic = $1`
-    if(topic){
-        queryValues.push(topic)
-        return db.query(
-            `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id) AS comment_count 
-            FROM articles
-            LEFT JOIN comments ON articles.article_id = comments.comment_id
-            ${queryStr}
-            GROUP BY articles.article_id
-            ORDER BY articles.created_at DESC;`, [topic]
-            ).then((result) => {
-            return result.rows
-        })
-    } else {
-    return db.query(
-        `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id) AS comment_count 
-        FROM articles
-        LEFT JOIN comments ON articles.article_id = comments.comment_id
-        GROUP BY articles.article_id
-        ORDER BY articles.created_at DESC;`, 
-        ).then((result) => {
-        return result.rows
-    })
-}
-}
+   
+   let queryStr = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id) AS comment_count 
+   FROM articles
+   LEFT JOIN comments ON articles.article_id = comments.comment_id ` 
+  if(topic){
+    queryValues.push(topic)
+    queryStr += `WHERE articles.topic = $1`
+  }
+  queryStr +=
+  ` GROUP BY articles.article_id
+   ORDER BY articles.created_at DESC;`
+   console.log(queryStr)
+        return db.query(queryStr,
+             queryValues)
+            .then((result) => {
+                if(result.rows.length === 0)
+                { return Promise.reject({status:404, msg: 'article does not exist'})
+                }
+             return result.rows
+             })
+    } 
+
+
 
 exports.selectCommentByArticleId = (article_id) => {
     

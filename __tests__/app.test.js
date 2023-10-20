@@ -51,7 +51,6 @@ describe("/api/articles/:article_id", () => {
         .get('/api/articles/1')
         .expect(200)
         .then((response) => {
-            console.log(response.body)
             expect(response.body.article.article_id).toBe(1)
             expect(response.body.article.title).toBe("Living in the shadow of a great man");
             expect(response.body.article.topic).toBe("mitch");
@@ -179,6 +178,22 @@ describe("GET/api/articles", () => {
             expect(response.body.articles.length).toBe(12)
         })
     })
+    test("GET: 404 status and returns an error message when article by topic value doesn't exist", () => {
+        return request(app)
+        .get('/api/articles?topic=iDontExist')
+        .expect(404)
+        .then((response) => {
+            expect(response.body.msg).toBe('article does not exist')
+        })
+    })
+    /*test("GET: 200 status and return an empty array when no articles reference this topic", () => {
+        return request(app)
+        .get('/api/articles?topic=paper')
+        .expect(200)
+        .then((response) => {
+            expect(response.body.articles.length).toBe(0)
+        })
+    })*/
    /* test("GET: 400 sends 400 and error message when given invalid sortby query", () => {
         return request(app)
         .get('/api/articles')
