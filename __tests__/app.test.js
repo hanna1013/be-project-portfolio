@@ -59,7 +59,7 @@ describe("/api/articles/:article_id", () => {
             expect(response.body.article.created_at).toBe("2020-07-09T20:11:00.000Z");
             expect(response.body.article.votes).toBe(100);
             expect(response.body.article.article_img_url).toBe("https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700");
-            expect(response.body.article.comment_count).toBe("1")
+            expect(response.body.article.comment_count).toBe("11")
         })
     })
     test("GET: 404 sends 404 and error message when given valid but non-existent id", () => {
