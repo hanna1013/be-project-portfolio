@@ -139,16 +139,18 @@ describe("GET/api/articles", () => {
         .get('/api/articles')
         .expect(200)
         .then((response) => {
+            console.log(response)
             expect(response.body.articles.length).toBe(13);  
             response.body.articles.forEach((article) => {
-                expect(typeof article.author).toBe('string');
-                expect(typeof article.title).toBe('string');
-                expect(typeof article.article_id).toBe('number');
-                expect(typeof article.topic).toBe('string');
-                expect(typeof article.created_at).toBe('string');
-                expect(typeof article.votes).toBe('number');
-                expect(typeof article.article_img_url).toBe('string');
-                expect(typeof article.comment_count).toBe('string')
+                
+                 expect(typeof article.author).toBe('string');
+                 expect(typeof article.title).toBe('string');
+                 expect(typeof article.article_id).toBe('number');
+                 expect(typeof article.topic).toBe('string');
+                 expect(article).toHaveProperty("created_at", expect.any(String));
+                 expect(typeof article.votes).toBe('number');
+                 expect(typeof article.article_img_url).toBe('string');
+                 expect(typeof article.comment_count).toBe('string')
             })
         })
     } )
@@ -186,23 +188,48 @@ describe("GET/api/articles", () => {
             expect(response.body.msg).toBe('article does not exist')
         })
     })
-    /*test("GET: 200 status and return an empty array when no articles reference this topic", () => {
+    // test("GET: 200 status and return an empty array when no articles reference this topic", () => {
+    //     return request(app)
+    //     .get('/api/articles?topic=paper')
+    //     .expect(200)
+    //     .then((response) => {
+    //         expect(response.body.articles.length).toBe(0)
+    //     })
+    // })
+     test("GET: 200 sort the articles by date in ascending order", () => {
+         return request(app)
+         .get('/api/articles?order=ASC')
+         .expect(200)
+         .then(({ body }) => {
+             expect(body.articles).toBeSortedBy('created_at', {descending: false});
+         }) 
+
+     })
+     test("GET: 200 sort the articles by author", () => {
         return request(app)
-        .get('/api/articles?topic=paper')
+        .get('/api/articles?sort_by=author')
         .expect(200)
-        .then((response) => {
-            expect(response.body.articles.length).toBe(0)
-        })
-    })*/
-   /* test("GET: 400 sends 400 and error message when given invalid sortby query", () => {
+        .then(({ body }) => {
+            expect(body.articles).toBeSortedBy('author', {descending: true});
+        }) 
+
+    })
+    test("GET: 400 sends 400 and error message when given invalid sortby query", () => {
         return request(app)
-        .get('/api/articles')
+        .get('/api/articles?sort_by=height')
         .expect(400)
         .then(({ body }) => {
-            console.log(body)
-            expect(body.msg).toBe('invalid sortby query!')
+            expect(body.msg).toBe('Invalid input')
         })
-    })*/
+    })
+    test("GET: 400 sends 400 and error message when given invalid order query", () => {
+        return request(app)
+        .get('/api/articles?order=height')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('Invalid input')
+        })
+    })
 })
 
 describe("/api/articles/:article_id/comments", () => {

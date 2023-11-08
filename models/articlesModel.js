@@ -14,8 +14,20 @@ exports.selectArticleById = (article_id) => {
 }
     
     
-exports.selectArticle = (topic) => {
+exports.selectArticle = (topic, sort_by = "created_at", order = "DESC") => {
     const queryValues = []
+    const validSortBy = [
+        "article_id",
+        "author",
+        "title",
+        "topic",
+        "created_at",
+        "votes",
+        "article_img_url",
+        "comment_count"
+    ]
+
+    const validOrder = ["ASC", "DESC"]
    
    let queryStr = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.body) AS comment_count 
    FROM articles
@@ -24,10 +36,15 @@ exports.selectArticle = (topic) => {
     queryValues.push(topic)
     queryStr += `WHERE articles.topic = $1`
   }
-  queryStr +=
-  ` GROUP BY articles.article_id
-   ORDER BY articles.created_at DESC;`
-   console.log(queryStr)
+  if(!validSortBy.includes(sort_by) || !validOrder.includes(order)) {
+    return Promise.reject({ status: 400, msg: "Invalid input"})
+   }
+  if(sort_by) {
+    queryStr +=
+    ` GROUP BY articles.article_id
+     ORDER BY ${sort_by} ${order};`
+  }
+  
         return db.query(queryStr,
              queryValues)
             .then((result) => {
